@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Redis持久化 | Hi hello word</title><meta name="keywords" content="数据库"><meta name="author" content="太阳下的懒猫"><meta name="copyright" content="太阳下的懒猫"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Redis持久化RDB在指定的时间间隔内将内存中的数据集快照写入磁盘，也就是行话讲的Snapshot快照，他恢复时是将快照直接读取到内存里 备份是如何执行的Redis会单独创建（fork）一个子进程来进行持久化。会将数据写入一个临时文件中，待持久化过程结束了。再将这个临时文件替换原来的那个正式备份文件，整个过程中，主进程是不进行任何IO操作的，RDB的缺点就是最后一次持久化的数据可能存在丢失  首">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis持久化">
+<meta property="og:url" content="https://an-opq.github.io/2022/03/06/2022-03-06/index.html">
+<meta property="og:site_name" content="Hi hello word">
+<meta property="og:description" content="Redis持久化RDB在指定的时间间隔内将内存中的数据集快照写入磁盘，也就是行话讲的Snapshot快照，他恢复时是将快照直接读取到内存里 备份是如何执行的Redis会单独创建（fork）一个子进程来进行持久化。会将数据写入一个临时文件中，待持久化过程结束了。再将这个临时文件替换原来的那个正式备份文件，整个过程中，主进程是不进行任何IO操作的，RDB的缺点就是最后一次持久化的数据可能存在丢失  首">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg">
+<meta property="article:published_time" content="2022-03-06T14:38:04.000Z">
+<meta property="article:modified_time" content="2022-03-06T15:07:29.176Z">
+<meta property="article:author" content="太阳下的懒猫">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://an-opq.github.io/2022/03/06/2022-03-06/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Redis持久化',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-06 23:07:29'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="/js/sakura.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hi hello word</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Redis持久化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-06T14:38:04.000Z" title="发表于 2022-03-06 22:38:04">2022-03-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-06T15:07:29.176Z" title="更新于 2022-03-06 23:07:29">2022-03-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Redis持久化"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Redis持久化"><a href="#Redis持久化" class="headerlink" title="Redis持久化"></a>Redis持久化</h1><h3 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a><code>RDB</code></h3><p>在指定的时间间隔内将内存中的数据集快照写入磁盘，也就是行话讲的<strong>Snapshot</strong>快照，他恢复时是将快照直接读取到内存里</p>
+<h3 id="备份是如何执行的"><a href="#备份是如何执行的" class="headerlink" title="备份是如何执行的"></a><code>备份是如何执行的</code></h3><p>Redis会单独创建（fork）一个子进程来进行持久化。会将数据写入一个临时文件中，待持久化过程结束了。再将这个临时文件替换原来的那个正式备份文件，整个过程中，主进程是不进行任何IO操作的，RDB的缺点就是最后一次持久化的数据可能存在丢失</p>
+<p><img src="/2022/03/06/2022-03-06/1.png" alt="img"></p>
+<p>首页Fork一个子进程，将数据快照同步到临时文件。就算这个时候服务挂了。只要临时文件不是完整的。那么就不会替换原来的dump.rdb。保证了数据的一致性与完整性</p>
+<h3 id="Fork"><a href="#Fork" class="headerlink" title="Fork"></a><code>Fork</code></h3><ul>
+<li>作用复制一个与当前进程一样的进程，包括所有数据（变量、环境变量、程序计数器等）数值都是和原进程一致，同时呢也是一个全新的进程，并作为原进程的子进程。</li>
+<li>在Linux程序中，fork()会产生一个和父进程完全一致的进程。但是子进程在此之后多会exec系统调用，处于效率考虑，在Linux中引用了<strong>写时复制技术</strong></li>
+<li>一般情况下父进程和子进程都是使用同一段内存空间，只有当进程的内容的各自段要发生改变时，才会将父进程的内存空间复制一份给子进程。</li>
+</ul>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><ul>
+<li><p><strong>save</strong></p>
+<p><img src="/2022/03/06/2022-03-06/2.png" alt="img"></p>
+</li>
+</ul>
+<p>在指定的时间间隔内将数据集写入磁盘</p>
+<p><img src="/2022/03/06/2022-03-06/3.png" alt="img"></p>
+<p>20秒之内 发生了修改key的数目≥3。则进行一次快照。PS：单次 20秒进行记录次数。若下次20秒需要重新记录key发生变化。</p>
+<ul>
+<li><p><strong>dump.rdb</strong></p>
+<p><img src="/2022/03/06/2022-03-06/4.png" alt="img"></p>
+</li>
+<li><p><strong>备份文件放置的目录</strong></p>
+</li>
+</ul>
+<p><img src="/2022/03/06/2022-03-06/5.png" alt="img"></p>
+<ul>
+<li><strong>stop-writes-on-bgsave-error</strong></li>
+</ul>
+<p><img src="/2022/03/06/2022-03-06/6.png" alt="img"></p>
+<p>当redis无法写入磁盘，则停止保存</p>
+<ul>
+<li><strong>rdbcompression</strong></li>
+</ul>
+<p><img src="/2022/03/06/2022-03-06/7.png" alt="img"></p>
+<p>对rdb备份文件进行压缩保存</p>
+<ul>
+<li><strong>rdbchecksum</strong></li>
+</ul>
+<p><img src="/2022/03/06/2022-03-06/8.png" alt="img"></p>
+<p>优点：</p>
+<ul>
+<li>适合大规模的数据恢复</li>
+<li>节省磁盘空间</li>
+<li>恢复更快</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>最后一次数据备份可能丢失</li>
+</ul>
+<p>eg:子进程复制数据中，程序漰溃。临时文件不完整，没法替换正式文件，那么数据就会丢失。</p>
+<ul>
+<li>fork的时候，由于内存中的数据被复制了一份，需要考虑2倍的膨胀性。</li>
+</ul>
+<h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a><code>AOF</code></h3><p>AOF是以日志的形式来记录每个写操作，将Redis执行过的写操作都记录下来（读操作不记录），只许追加文件但不可以改写文件 ，在redis进行重启时，将日志文件再次进行运行一遍。</p>
+<ul>
+<li>操作<ul>
+<li>客户端的请求会被Redis Append追加到AOF缓冲区</li>
+<li><strong>AOF</strong>缓冲区会根据AOF记录策略[everysec、always、no]同步到<strong>AOF</strong>文件中</li>
+<li><strong>AOF</strong>文件超过策略容量、或手动重写时。会对AOF进行重写，压缩AOF容量</li>
+<li><strong>Redis</strong>重启时，会重新加载AOF中写操作，以达到恢复数据的目的</li>
+</ul>
+</li>
+</ul>
+<p>RDB与AOF同时开启时，Redis重启时，会默认读取AOF文件来恢复数据（数据不存在丢失）</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a><code>配置</code></h3><ul>
+<li><p>appendonly on (默认不开启)</p>
+<p><img src="/2022/03/06/2022-03-06/9.png" alt="img"></p>
+</li>
+<li><p>appendfilename （AOF文件名）</p>
+<p><img src="/2022/03/06/2022-03-06/10.png" alt="img"></p>
+</li>
+<li><p>appendfsync exerysec</p>
+<p><img src="/2022/03/06/2022-03-06/11.png" alt="img"></p>
+</li>
+</ul>
+<p><code>always</code>:</p>
+<p>每次写操作到 append到备份文件中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">everysec：</span><br></pre></td></tr></table></figure>
+
+<p>每秒同步一次。若服务挂了，该秒的数据可能丢失</p>
+<p><code>no</code>：</p>
+<p>Redis 不主动同步数据，将主动权交给操作系统</p>
+<ul>
+<li><p>AOF重写文件的策略值</p>
+<p><img src="/2022/03/06/2022-03-06/12.png" alt="img"></p>
+</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>备份机制更稳重，丢失数据的概率更低</li>
+<li>可读的日志文本，可以操作“误操作”</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>比起 <em><strong>RDB</strong></em> 占用更多的磁盘空间；</li>
+<li>恢复备份速度要慢；</li>
+<li>每次读写都同步的话，有一定的性能压力；</li>
+<li>存在个别 <em><strong>Bug</strong></em>，造成不能恢复。</li>
+</ul>
+<blockquote>
+<p>官方推荐两个都启用。</p>
+<p>如果对数据不敏感，可以选单独用 <em><strong>RDB</strong></em>。</p>
+<p>不建议单独用 <em><strong>AOF</strong></em>，因为可能会出现 <em><strong>Bug</strong></em>。</p>
+<p>如果只是做纯内存缓存，可以都不用。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">太阳下的懒猫</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://an-opq.github.io/2022/03/06/2022-03-06/">https://an-opq.github.io/2022/03/06/2022-03-06/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://an-opq.github.io" target="_blank">Hi hello word</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/03/05/2022-03-05/"><img class="next-cover" src="/img/banner.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">记录朋友的平面设计</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">太阳下的懒猫</div><div class="author-info__description">产品来源生活,技术源于热爱</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/An-OPQ"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">Redis持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RDB"><span class="toc-number">1.0.1.</span> <span class="toc-text">RDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%87%E4%BB%BD%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84"><span class="toc-number">1.0.2.</span> <span class="toc-text">备份是如何执行的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fork"><span class="toc-number">1.0.3.</span> <span class="toc-text">Fork</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.0.4.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOF"><span class="toc-number">1.0.5.</span> <span class="toc-text">AOF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.0.6.</span> <span class="toc-text">配置</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/03/06/2022-03-06/" title="Redis持久化"><img src="https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis持久化"/></a><div class="content"><a class="title" href="/2022/03/06/2022-03-06/" title="Redis持久化">Redis持久化</a><time datetime="2022-03-06T14:38:04.000Z" title="发表于 2022-03-06 22:38:04">2022-03-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/05/2022-03-05/" title="记录朋友的平面设计"><img src="/img/banner.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="记录朋友的平面设计"/></a><div class="content"><a class="title" href="/2022/03/05/2022-03-05/" title="记录朋友的平面设计">记录朋友的平面设计</a><time datetime="2022-03-05T14:50:40.000Z" title="发表于 2022-03-05 22:50:40">2022-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/05/SSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B7%BB%E5%8A%A0%E4%B8%8ENginx%E9%85%8D%E7%BD%AE/" title="SSL证书的添加与Nginx配置"><img src="https://w.wallhaven.cc/full/dp/wallhaven-dpmdq3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSL证书的添加与Nginx配置"/></a><div class="content"><a class="title" href="/2022/03/05/SSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B7%BB%E5%8A%A0%E4%B8%8ENginx%E9%85%8D%E7%BD%AE/" title="SSL证书的添加与Nginx配置">SSL证书的添加与Nginx配置</a><time datetime="2022-03-05T12:36:38.000Z" title="发表于 2022-03-05 20:36:38">2022-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/05/hello-world/" title="Hello World"><img src="/img/banner.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2022/03/05/hello-world/" title="Hello World">Hello World</a><time datetime="2022-03-05T03:54:39.594Z" title="发表于 2022-03-05 11:54:39">2022-03-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By 太阳下的懒猫</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi,welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax src="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.js"></script><script data-pjax>
+  function gitcalendar_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<container><style>#git_container{min-height: 280px}@media screen and (max-width:650px) {#git_container{min-height: 0px}}</style><div id="git_loading" style="width:10%;height:100%;margin:0 auto;display: block;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></path></svg><style>#git_container{display: none;}</style></div><div id="git_container"></div></container>';
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      console.log('已挂载gitcalendar')
+      }
+
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+        gitcalendar_injector_config()
+        GitCalendarInit("https://gitcalendar.akilar.top/api?An-OPQ",['#ebedf0', '#f1f8ff', '#dbedff', '#c8e1ff', '#79b8ff', '#2188ff', '#0366d6', '#005cc5', '#044289', '#032f62', '#05264c'],'An-OPQ')
+    }
+  </script><!-- hexo injector body_end end --></body></html>
