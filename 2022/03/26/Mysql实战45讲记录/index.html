@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Mysql实战45讲记录 | Hi hello word</title><meta name="keywords" content="Mysql"><meta name="author" content="太阳下的懒猫"><meta name="copyright" content="太阳下的懒猫"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Mysql实战四十五讲ps：本文用于记录极客时间《Mysql实战四十五讲》的内容，同时也是自我学习的记录，如有需要，请阅读原书籍 03事务隔离简单来说：事务就是一组数据库操作序列。这个操作序列要么都执行成功，要么都执行失败。在Mysql中事务是由数据库引擎层来实现的，你知道Mysql是一个多数据库引擎的数据库系统，但并不是所有的引擎都支持事务，eg：Mysql的原生引擎：MyISAM就不支持事务，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql实战45讲记录">
+<meta property="og:url" content="https://an-opq.github.io/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Hi hello word">
+<meta property="og:description" content="Mysql实战四十五讲ps：本文用于记录极客时间《Mysql实战四十五讲》的内容，同时也是自我学习的记录，如有需要，请阅读原书籍 03事务隔离简单来说：事务就是一组数据库操作序列。这个操作序列要么都执行成功，要么都执行失败。在Mysql中事务是由数据库引擎层来实现的，你知道Mysql是一个多数据库引擎的数据库系统，但并不是所有的引擎都支持事务，eg：Mysql的原生引擎：MyISAM就不支持事务，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://an-opq.github.io/img/banner.jpg">
+<meta property="article:published_time" content="2022-03-26T02:51:29.000Z">
+<meta property="article:modified_time" content="2022-04-02T15:30:12.389Z">
+<meta property="article:author" content="太阳下的懒猫">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://an-opq.github.io/img/banner.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://an-opq.github.io/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Mysql实战45讲记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-04-02 23:30:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/banner.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hi hello word</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Mysql实战45讲记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-26T02:51:29.000Z" title="发表于 2022-03-26 10:51:29">2022-03-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-04-02T15:30:12.389Z" title="更新于 2022-04-02 23:30:12">2022-04-02</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Mysql实战45讲记录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Mysql实战四十五讲"><a href="#Mysql实战四十五讲" class="headerlink" title="Mysql实战四十五讲"></a>Mysql实战四十五讲</h1><p>ps：本文用于记录极客时间《Mysql实战四十五讲》的内容，同时也是自我学习的记录，如有需要，请阅读原书籍</p>
+<h3 id="03事务隔离"><a href="#03事务隔离" class="headerlink" title="03事务隔离"></a>03事务隔离</h3><p>简单来说：事务就是一组数据库操作序列。这个操作序列要么都执行成功，要么都执行失败。在Mysql中事务是由数据库引擎层来实现的，你知道Mysql是一个多数据库引擎的数据库系统，但并不是所有的引擎都支持事务，eg：Mysql的原生引擎：MyISAM就不支持事务，这个也是MyISAM被InnoDB所取代的重要原因之一。</p>
+<h5 id="隔离性与隔离级别"><a href="#隔离性与隔离级别" class="headerlink" title="隔离性与隔离级别"></a>隔离性与隔离级别</h5><p>提到事务，你应该就会想起ACID（即：原子性、一致性、隔离性、持久性）今天，我们就来讲讲隔离性</p>
+<p>当数据库同时有多个事务事，就是产生：脏读、不可重复读、幻读等问题。为了解决这些问题，那么就存在了 “<strong>隔离级别</strong>”</p>
+<p>下面举例说明：（无图版本）</p>
+<ul>
+<li><p>脏读：</p>
+<p>事务A、事务B都需要做转帐操作，A读取余额100，然后进行转帐操作-50。在A还未提交事务前，B进行了余额读取100。那么此时B读取的数据就是脏数据。</p>
+</li>
+<li><p>不可重复读：</p>
+<p>事务A、事务B都需要做转帐操作，A读取余额100，然后进行IO操作，此时B进行转帐-50操作，并且提交了事务。那么此时余额：50。等A IO操作结束之后，再次读取余额，发现与第一次（100）不对，第二次（50）。那么这就是不可重复读</p>
+</li>
+<li><p>幻读：</p>
+<p>事务A、事务B。A对某一个表进行整表进行操作，eg：修改整表的<strong>remove</strong> 字段修改为：true。那么表就是为逻辑空表，B此时插入两条数据，<strong>remove</strong>字段默认false，那么本该是整表逻辑空，就会产生幻读</p>
+</li>
+</ul>
+<p>为了解决这些问题，就会引出<strong>隔离级别</strong>，在谈隔离级别之前，要知道，隔离的越严格，效率就越低，我们是需要在二者之间找到一个平衡点</p>
+<ul>
+<li><p>读未提交</p>
+<p>​    事务还没提交，他所做的更改就能被其他事务所看到</p>
+<p>​    这是最低的隔离级别。可能会导致：脏读、不可重复读、幻读</p>
+</li>
+<li><p>读已提交</p>
+<p>​    事务需要提交之后，他所做的更改才能被其他事务看到</p>
+<p>​    可以用于解决脏读，但是不可解决不可重复读、幻读</p>
+</li>
+<li><p>可重复读</p>
+<p>​    一个事务在运行中看到的数据，总是和在启动的时候看到的数据是一致的。当然在可重复读的隔离级别下，事务未提交之后，他所在的更改是不会被其他事务所看见的。<strong>（也就是说：隔离级别高的事务是会包含隔离级别的能力）</strong> 用于解决不可重复读、也可解决脏读。不能解决幻读</p>
+</li>
+<li><p>串行化</p>
+<p>​    顾名思义：多个事务之间只能串行化执行（只能有一个事务在执行），读会加“<strong>读锁</strong>”，写会加“<strong>写锁</strong>”。当出现事务读些冲突时，只能前一个事务完成了，后一个才能执行</p>
+</li>
+</ul>
+<p>在实际上，数据库里面会创建一个视图，返回数据是以视图为主的。<br><strong>可重复读</strong>隔离级别下。这个视图是在事务开启的时候进行创建的，整个事务存在期间都是使用这个视图。</p>
+<blockquote>
+<p>思考：这也就说明了，为啥从事务的开始和事务末尾，读取一个值是不会发生变化的。<strong>读已提交</strong> 它的视图力度就没有 <strong>可重复读</strong> 的大。</p>
+</blockquote>
+<p><strong>读已提交</strong>隔离级别下。这个视图是在SQL开始执行的时候创建的。</p>
+<blockquote>
+<p>注：事务概述：事务是一个数据库的操作序列。所以也就不会限制只有一条SQL语句。所以，<strong>读已提交</strong>的视图力度没有<strong>可重复读</strong>大</p>
+</blockquote>
+<p><strong>读未提交</strong>隔离级别下。是没有视图概念的，是直接返回记录上的最新值。</p>
+<p><strong>串行化</strong>隔离级别下。则是直接用于加锁来并行访问。</p>
+<blockquote>
+<p>长事务：需要后续进行补充</p>
+</blockquote>
+<p>MySQL，实际上每条记录在更新的时候，都会记录一条回滚记录，在记录时，不同时刻启动的事务会有不同read-view。同一个记录可以在数据库中存在多个版本，这就是数据库的多版本并发控制。</p>
+<hr>
+<h3 id="04-索引"><a href="#04-索引" class="headerlink" title="04 索引"></a>04 索引</h3><blockquote>
+<p>索引的出现就是为了提高查询的效率，就类似与书的目录一样</p>
+</blockquote>
+<p>三种常见的数据模型：哈希表、有序数组、搜索树</p>
+<ul>
+<li>哈希表由于特性。查找[ID_X，ID_Y]。这种区间格式的效率底下，所以哈希表这种结构适合等值查询的场景 。</li>
+<li>有序数组在范围查询、和等值查询效率都比较优秀。由于插入成本较高，所以只适合于静态存储引擎。例如：2017年年度审计日至报表。</li>
+<li>平衡二叉搜索树是效率最高的，</li>
+</ul>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">太阳下的懒猫</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://an-opq.github.io/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/">https://an-opq.github.io/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://an-opq.github.io" target="_blank">Hi hello word</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Mysql/">Mysql</a></div><div class="post_share"><div class="social-share" data-image="/img/banner.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/03/08/Spring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"><img class="next-cover" src="/img/banner.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Spring底层原理</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">太阳下的懒猫</div><div class="author-info__description">产品来源生活,技术源于热爱</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/An-OPQ"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql%E5%AE%9E%E6%88%98%E5%9B%9B%E5%8D%81%E4%BA%94%E8%AE%B2"><span class="toc-number">1.</span> <span class="toc-text">Mysql实战四十五讲</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#03%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB"><span class="toc-number">1.0.1.</span> <span class="toc-text">03事务隔离</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9A%94%E7%A6%BB%E6%80%A7%E4%B8%8E%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-number">1.0.1.0.1.</span> <span class="toc-text">隔离性与隔离级别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#04-%E7%B4%A2%E5%BC%95"><span class="toc-number">1.0.2.</span> <span class="toc-text">04 索引</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/" title="Mysql实战45讲记录"><img src="/img/banner.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Mysql实战45讲记录"/></a><div class="content"><a class="title" href="/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/" title="Mysql实战45讲记录">Mysql实战45讲记录</a><time datetime="2022-03-26T02:51:29.000Z" title="发表于 2022-03-26 10:51:29">2022-03-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/08/Spring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="Spring底层原理"><img src="/img/banner.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring底层原理"/></a><div class="content"><a class="title" href="/2022/03/08/Spring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="Spring底层原理">Spring底层原理</a><time datetime="2022-03-08T14:26:48.000Z" title="发表于 2022-03-08 22:26:48">2022-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/06/2022-03-06/" title="Redis持久化"><img src="https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis持久化"/></a><div class="content"><a class="title" href="/2022/03/06/2022-03-06/" title="Redis持久化">Redis持久化</a><time datetime="2022-03-06T14:38:04.000Z" title="发表于 2022-03-06 22:38:04">2022-03-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/05/SSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B7%BB%E5%8A%A0%E4%B8%8ENginx%E9%85%8D%E7%BD%AE/" title="SSL证书的添加与Nginx配置"><img src="https://w.wallhaven.cc/full/dp/wallhaven-dpmdq3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSL证书的添加与Nginx配置"/></a><div class="content"><a class="title" href="/2022/03/05/SSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B7%BB%E5%8A%A0%E4%B8%8ENginx%E9%85%8D%E7%BD%AE/" title="SSL证书的添加与Nginx配置">SSL证书的添加与Nginx配置</a><time datetime="2022-03-05T12:36:38.000Z" title="发表于 2022-03-05 20:36:38">2022-03-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By 太阳下的懒猫</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi,welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
