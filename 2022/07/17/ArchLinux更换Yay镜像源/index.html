@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>ArchLinux更换Yay镜像源 | 夏日盐糖汽水</title><meta name="keywords" content="Linux"><meta name="author" content="太阳下的懒猫"><meta name="copyright" content="太阳下的懒猫"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ArchLinux更换AUR源 💡 申明:作者写博客主要是用于记录个人学习。讲解并不全面，请多多包涵！    💡 由于2022-02-05清华大学软件开源镜像站的一则通知。   AUR关于移除 AUR 镜像的通知 | 镜像站新闻 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror AUR的镜像源地址被移除了。 导致我无法正常的去下载或更新AUR的软件包，所以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArchLinux更换Yay镜像源">
+<meta property="og:url" content="https://an-opq.github.io/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/index.html">
+<meta property="og:site_name" content="夏日盐糖汽水">
+<meta property="og:description" content="ArchLinux更换AUR源 💡 申明:作者写博客主要是用于记录个人学习。讲解并不全面，请多多包涵！    💡 由于2022-02-05清华大学软件开源镜像站的一则通知。   AUR关于移除 AUR 镜像的通知 | 镜像站新闻 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror AUR的镜像源地址被移除了。 导致我无法正常的去下载或更新AUR的软件包，所以">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/1k/wallhaven-1k5l19.jpg">
+<meta property="article:published_time" content="2022-07-17T05:43:26.000Z">
+<meta property="article:modified_time" content="2022-07-17T07:29:29.742Z">
+<meta property="article:author" content="太阳下的懒猫">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/1k/wallhaven-1k5l19.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://an-opq.github.io/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ArchLinux更换Yay镜像源',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-17 15:29:29'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://w.wallhaven.cc/full/1k/wallhaven-1k5l19.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">夏日盐糖汽水</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ArchLinux更换Yay镜像源</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-17T05:43:26.000Z" title="发表于 2022-07-17 13:43:26">2022-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-17T07:29:29.742Z" title="更新于 2022-07-17 15:29:29">2022-07-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ArchLinux更换Yay镜像源"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="ArchLinux更换AUR源"><a href="#ArchLinux更换AUR源" class="headerlink" title="ArchLinux更换AUR源"></a>ArchLinux更换AUR源</h1><aside>
+💡 申明:作者写博客主要是用于记录个人学习。讲解并不全面，请多多包涵！
+</aside>
+
+<aside>
+💡 由于2022-02-05清华大学软件开源镜像站的一则通知。
+</aside>
+
+<h3 id="AUR"><a href="#AUR" class="headerlink" title="AUR"></a>AUR</h3><p><a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/news/remove-aur/">关于移除 AUR 镜像的通知 | 镜像站新闻 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+<p><code>AUR的镜像源地址被移除了。</code></p>
+<p>导致我无法正常的去下载或更新AUR的软件包，所以我需要更换AUR的源</p>
+<p>这里：我本人没有选择国内其他厂商的源（其实是因为我没有找到哈哈）</p>
+<p>最后我选择官方源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 由于清华源的服务器停止运营。所以aur不能使用清华源。</span></span><br><span class="line"><span class="comment"># 下面地址是archlinux 官方源。</span></span><br><span class="line">yay --aururl <span class="string">&quot;https://aur.archlinux.org&quot;</span> --save</span><br></pre></td></tr></table></figure>
+
+<p>注意：由于我使用的官方源地址，网速也会相对变慢。我个人一般都会选择代理，这对我来说是一种比较好的选择。</p>
+<p>前提是：在没有国内其他AUR源地址的情况下。</p>
+<hr>
+<p>这时，我们就可以愉快的更新或下载软件了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># yay 包含pacman 的所有，同时远不止pacman的功能</span></span><br><span class="line"><span class="comment"># eg：yay -Syu 就是pacman -Syu的进阶版本。只不过yay -Syu 同时也会更新aur和官方源/第三方源的所有软件包</span></span><br><span class="line">yay -Syu   </span><br></pre></td></tr></table></figure>
+
+<p>所以同学们，还是要突破自己的学习孤岛</p>
+<hr>
+<h3 id="yay"><a href="#yay" class="headerlink" title="yay"></a>yay</h3><p>下面我来介绍一些yay的个人常用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># man yay</span></span><br><span class="line">yay -S  &lt;package_name&gt; <span class="comment"># </span></span><br><span class="line">yay -Sua <span class="comment"># 更新本地电脑已经安装的aur软件</span></span><br><span class="line">yay -Syu <span class="comment"># 与 pacman -Syu 一致，同时也包括aur软件</span></span><br><span class="line">yay -Rsc <span class="comment"># 包括依赖一起删除软件</span></span><br><span class="line">yay -Pww <span class="comment"># 获取最新的ArchLinux-wiki新闻</span></span><br><span class="line">yay -Ss  <span class="comment"># 同pacman 一致，查找匹配名称的软件包。我个人一般喜欢直接上官网的aur Web页面中找</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/image-20220717143148846.png" alt="image-20220717143148846"></p>
+<p><img src="/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/image-20220717143448357.png" alt="image-20220717143448357"></p>
+<hr>
+<h3 id="ProxyChains-NG"><a href="#ProxyChains-NG" class="headerlink" title="ProxyChains-NG"></a><strong>ProxyChains-NG</strong></h3><p>我在日常使用终端的过程中，会遇到许多需要下载国外资源的情况。</p>
+<p><strong>eg：更新软件的时候，需要下载github.com的软件包，而terminal在没有代理的情况下，网速非常慢， 所以我推荐使用这款软件包。</strong></p>
+<p><strong>可以代理terminal</strong></p>
+<p>最开始，我一直以为terminal也是走我的软件代理的。其实并不是</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 通过yay 下载。</span></span><br><span class="line">yay -S proxychains-ng</span><br><span class="line"><span class="comment"># 安装软件之后,修改配置.</span></span><br><span class="line">sudo vim /etc/proxychains.conf</span><br><span class="line"><span class="comment"># 在配置文件中最后添加</span></span><br><span class="line"><span class="comment"># 我在使用过程中只有注释了socks4协议在生效，不知为啥</span></span><br><span class="line">socks5 	127.0.0.1 7891 (端口按照你自己的来)</span><br><span class="line"><span class="comment"># 我看到文章同时也说:注释</span></span><br><span class="line">proxy_dns</span><br><span class="line"><span class="comment"># 因为:disable远程DNS解析，有DNS污染风险</span></span><br></pre></td></tr></table></figure>
+
+<p>之后就可以正常使用了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains &lt;<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">proxychanis wget http://www.github.com/xxxxxxx</span><br><span class="line">proxychains curl http://google.com/xxxxxx</span><br></pre></td></tr></table></figure>
+
+<p>配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当前shell走代理</span></span><br><span class="line"><span class="built_in">export</span> http_proxy=127.0.0.1:7890</span><br><span class="line"><span class="built_in">export</span> https_proxy=127.0.0.1:7890</span><br><span class="line"><span class="built_in">export</span> socks_proxy=127.0.0.1:7891</span><br><span class="line"><span class="comment"># 一致保持这个配置</span></span><br><span class="line"><span class="comment"># 打开 /etc/environment  </span></span><br><span class="line">sudo vim /etc/environment  </span><br><span class="line"><span class="comment"># 在 /etc/environment 中加入如下内容</span></span><br><span class="line">http_proxy=127.0.0.1:7890</span><br><span class="line">https_proxy=127.0.0.1:7890</span><br><span class="line">socks_proxy=127.0.0.1:7891</span><br></pre></td></tr></table></figure>
+
+<p>参考：若想深入了解，建议去阅读原博客或官网wiki</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/363666022">yay进阶</a></p>
+<p><a target="_blank" rel="noopener" href="https://guangchuangyu.github.io/cn/2018/09/proxychains/">一次解决所有代理问题</a></p>
+<p><a target="_blank" rel="noopener" href="https://hezhaojiang.github.io/post/2020/b7dd7417/">善用佳软 - ProxyChains-NG 安装与使用</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">太阳下的懒猫</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://an-opq.github.io/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/">https://an-opq.github.io/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://an-opq.github.io" target="_blank">夏日盐糖汽水</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/1k/wallhaven-1k5l19.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/"><img class="next-cover" src="https://w.wallhaven.cc/full/l3/wallhaven-l3xk6q.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Mysql实战45讲记录</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">太阳下的懒猫</div><div class="author-info__description">产品来源生活,技术源于热爱</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/An-OPQ"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Blog 仅用于记录我的学习历程</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ArchLinux%E6%9B%B4%E6%8D%A2AUR%E6%BA%90"><span class="toc-number">1.</span> <span class="toc-text">ArchLinux更换AUR源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AUR"><span class="toc-number">1.0.1.</span> <span class="toc-text">AUR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yay"><span class="toc-number">1.0.2.</span> <span class="toc-text">yay</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ProxyChains-NG"><span class="toc-number">1.0.3.</span> <span class="toc-text">ProxyChains-NG</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/" title="ArchLinux更换Yay镜像源"><img src="https://w.wallhaven.cc/full/1k/wallhaven-1k5l19.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ArchLinux更换Yay镜像源"/></a><div class="content"><a class="title" href="/2022/07/17/ArchLinux%E6%9B%B4%E6%8D%A2Yay%E9%95%9C%E5%83%8F%E6%BA%90/" title="ArchLinux更换Yay镜像源">ArchLinux更换Yay镜像源</a><time datetime="2022-07-17T05:43:26.000Z" title="发表于 2022-07-17 13:43:26">2022-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/" title="Mysql实战45讲记录"><img src="https://w.wallhaven.cc/full/l3/wallhaven-l3xk6q.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Mysql实战45讲记录"/></a><div class="content"><a class="title" href="/2022/03/26/Mysql%E5%AE%9E%E6%88%9845%E8%AE%B2%E8%AE%B0%E5%BD%95/" title="Mysql实战45讲记录">Mysql实战45讲记录</a><time datetime="2022-03-26T02:51:29.000Z" title="发表于 2022-03-26 10:51:29">2022-03-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/08/Spring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="Spring底层原理"><img src="https://w.wallhaven.cc/full/y8/wallhaven-y8622k.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring底层原理"/></a><div class="content"><a class="title" href="/2022/03/08/Spring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="Spring底层原理">Spring底层原理</a><time datetime="2022-03-08T14:26:48.000Z" title="发表于 2022-03-08 22:26:48">2022-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/06/2022-03-06/" title="Redis持久化"><img src="https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis持久化"/></a><div class="content"><a class="title" href="/2022/03/06/2022-03-06/" title="Redis持久化">Redis持久化</a><time datetime="2022-03-06T14:38:04.000Z" title="发表于 2022-03-06 22:38:04">2022-03-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/05/SSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B7%BB%E5%8A%A0%E4%B8%8ENginx%E9%85%8D%E7%BD%AE/" title="SSL证书的添加与Nginx配置"><img src="https://w.wallhaven.cc/full/dp/wallhaven-dpmdq3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSL证书的添加与Nginx配置"/></a><div class="content"><a class="title" href="/2022/03/05/SSL%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B7%BB%E5%8A%A0%E4%B8%8ENginx%E9%85%8D%E7%BD%AE/" title="SSL证书的添加与Nginx配置">SSL证书的添加与Nginx配置</a><time datetime="2022-03-05T12:36:38.000Z" title="发表于 2022-03-05 20:36:38">2022-03-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By 太阳下的懒猫</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi,welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/"});</script></body></html>
