@@ -1,0 +1,13 @@
+class:
+  class_name: 友情链接
+  link_list:
+    1:
+      name: Ariesiew
+      link: https://yinyongwei.github.io/
+      avatar: https://cdn.yinyongwei.cn/halo/a00002.jpg
+      descr: 今日事,今日毕
+    2:
+      name: 树懒下的睡猫
+      link: http://wenjianhaode.top/
+      avatar: http://wenjianhaode.top/upload/2022/06/wallhaven-dpqjwj_1920x1080.png
+      descr: 凡是过往，皆为序章
