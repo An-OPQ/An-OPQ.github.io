@@ -163,4 +163,4 @@ live2d:
 deploy:
   type: git
   repository: git@github.com:An-OPQ/An-OPQ.github.io.git
-  branch: master
+  branch: main
