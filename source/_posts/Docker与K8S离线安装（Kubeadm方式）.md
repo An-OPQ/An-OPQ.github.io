@@ -153,11 +153,11 @@ sudo sysctl --system
 #示例：scp
 # 默认22 端口
 scp <docker file >  <remoteUser>@<remoteIP>:<remotePath>
-# 指定ssh端口（一般都是默认22端口，若您修改了ssh端口则需要指定，下面示例：10086端口）
-# -P(大写)
-scp -P docker-20.10.0.tgz root@192.168.101.252:/home/admin 
+# 指定ssh端口（一般都是默认22端口，若您修改了ssh端口则需要指定，下面示例：10011端口）
 # 默认22 端口
 scp docker-20.10.0.tgz root@192.168.101.252:/home/admin
+# -P(大写)
+scp -P 10011  docker-20.10.0.tgz root@192.168.101.252:/home/admin 
 ```
 
 2. 解压
@@ -175,15 +175,7 @@ sudo cp docker/* /usr/bin/
 4. 创建docker.service文件
 
 ```bash
-sudo vim /etc/systemd/system/docker.service
-```
-
-5. 修改配置文件
-
-将 `--insecure-registry=192.168.101.252`  修改为自己的ip
-
-```bash
-[Unit]
+cat > /usr/lib/systemd/system/docker.service << 'EOF'
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
 After=network-online.target firewalld.service
@@ -191,74 +183,35 @@ Wants=network-online.target
 
 [Service]
 Type=notify
-# the default is not to use systemd for cgroups because the delegate issues still
-# exists and systemd currently does not support the cgroup feature set required
-# for containers run by docker
-ExecStart=/usr/bin/dockerd --selinux-enabled=false --insecure-registry=192.168.101.252
+ExecStart=/usr/bin/dockerd
 ExecReload=/bin/kill -s HUP $MAINPID
-# Having non-zero Limit*s causes performance problems due to accounting overhead
-# in the kernel. We recommend using cgroups to do container-local accounting.
 LimitNOFILE=infinity
 LimitNPROC=infinity
-LimitCORE=infinity
-# Uncomment TasksMax if your systemd version supports it.
-# Only systemd 226 and above support this version.
-#TasksMax=infinity
 TimeoutStartSec=0
-# set delegate yes so that systemd does not reset the cgroups of docker containers
 Delegate=yes
-# kill only the docker process, not all processes in the cgroup
 KillMode=process
-# restart the docker process if it exits prematurely
 Restart=on-failure
 StartLimitBurst=3
 StartLimitInterval=60s
 
 [Install]
 WantedBy=multi-user.target
+EOF
 ```
 
-6. 给docker.service 添加权限
+6. 启动docker
+
+   ps：注意一定要先启动docker，再添加daemon.json文件。
 
 ```bash
-sudo chmod 755 /etc/systemd/system/docker.service
+systemctl enable docker --now
 ```
 
-7. 重新加载配置文件、启动、设置开机自启动
+7. 添加daemon.json文件
 
 ```bash
-# 重新加载配置文件 每次修改了docker.service都要重新加载一下
-sudo systemctl daemon-reload
-# 启动
-sudo systemctl start docker
-# systemctl enable docker.service
-```
-
-8. 查看docker状态
-
-```bash
-sudo systemctl status docker
-```
-
-下图
-
-![](1-16629132599041.png)
-
-9. 配置静态加速器
-
-```bash
-vim /etc/docker/daemon.json
-```
-
-配置docker镜像地址
-
-`exec-opts`：一定要加，否则K8S会报错。
-
-```bash
-sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json <<-'EOF'
+cat > /etc/docker/daemon.json <<EOF
 {
-"registry-mirrors": ["https://uleyvyb3.mirror.aliyuncs.com"],
 "exec-opts": ["native.cgroupdriver=systemd"],
 "log-driver": "json-file",
 "log-opts": {
@@ -268,24 +221,21 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
   "storage-opts": [
     "overlay2.override_kernel_check=true"
     ]
-}                                                                                                                                                                                                                                         
+}
 EOF
-sudo systemctl daemon-reload
-sudo systemctl restart docker
 ```
 
-aliyun镜像：由于阿里云的docker镜像都是个人的，所以自己登陆aliyun复制下来即可
+8. 重启docker
+
+```bash
+systemctl daemon-reload && systemctl restart docker
+```
+
+aliyun镜像地址：由于阿里云的docker镜像都是个人的，所以自己登陆aliyun复制下来即可
 
 管控台：搜索→容器镜像服务
 
 ![2](image-20220912002246090.png)
-
-10. 设置开机启动
-
-```bash
-#开机自启动
-sudo systemctl enable docker.service
-```
 
 ### 安装k8s（kubeadm-1.23.8、kubelet-1.23.8、kubectl-1.23.8）
 
@@ -492,7 +442,13 @@ kubectl apply -f calico.yaml
 
 6. node节点加入k8s集群
 
-node节点也需要安装kubeadm、kubelet、kubectl
+node节点也需要安装kubeadm、kubelet、kubectl三个组件，同时还需要导入网络插件calico的全部镜像{calico/kube-controllers，calico/cni，calico/node  }与
+
+K8S的两个镜像{registry.aliyuncs.com/google_containers/pause，registry.aliyuncs.com/google_containers/kube-proxy }
+
+node节点：必须包含下列镜像
+
+![image-20221017093756486](E:\JavaHome\study\An-OPQ.github.io\source\_posts\Docker与K8S离线安装（Kubeadm方式）\image-20221017093756486.png)
 
 kubeadm join 可以直接在步骤4-初始化执行完的终端上看到提示，也可以看日志文件<kubeadm-init.log>
 
@@ -506,3 +462,8 @@ vim kubeadm-init.log
 kubeadm join ................
 ```
 
+PS：kubeadm join 卡住不动或则失败的原因可能是：
+
+- 服务器的时间不同步
+- kubeadm 令牌过期
+  - kubeadm的令牌仅仅只有一天。若过期则需要重新生成令牌
