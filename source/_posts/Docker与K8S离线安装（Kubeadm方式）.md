@@ -442,13 +442,9 @@ kubectl apply -f calico.yaml
 
 6. node节点加入k8s集群
 
-node节点也需要安装kubeadm、kubelet、kubectl三个组件，同时还需要导入网络插件calico的全部镜像{calico/kube-controllers，calico/cni，calico/node  }与
+(node节点不需要初始化，安装好下面三个组件直接join)
 
-K8S的两个镜像{registry.aliyuncs.com/google_containers/pause，registry.aliyuncs.com/google_containers/kube-proxy }
-
-node节点：必须包含下列镜像
-
-![image-20221017093756486](E:\JavaHome\study\An-OPQ.github.io\source\_posts\Docker与K8S离线安装（Kubeadm方式）\image-20221017093756486.png)
+node节点也需要安装kubeadm、kubelet、kubectl
 
 kubeadm join 可以直接在步骤4-初始化执行完的终端上看到提示，也可以看日志文件<kubeadm-init.log>
 
