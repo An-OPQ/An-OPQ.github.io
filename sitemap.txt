@@ -1,5 +1,6 @@
-http://example.com/2022/11/16/Kuboard%E9%83%A8%E7%BD%B2-k8s%E6%96%B9%E5%BC%8F/
+http://example.com/2022/12/18/%E4%BD%BF%E7%94%A8Ktctl%E8%BF%9E%E6%8E%A5K8S%E9%9B%86%E7%BE%A4%E5%86%85%E7%BD%91/
 http://example.com/2022/09/12/Docker%E4%B8%8EK8S%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%EF%BC%88Kubeadm%E6%96%B9%E5%BC%8F%EF%BC%89/
+http://example.com/2022/11/16/Kuboard%E9%83%A8%E7%BD%B2-k8s%E6%96%B9%E5%BC%8F/
 http://example.com/timeline/index.html
 http://example.com/about/index.html
 http://example.com/link/index.html
