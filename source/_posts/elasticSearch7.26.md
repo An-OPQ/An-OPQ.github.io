@@ -1,6 +1,6 @@
 ---
 title: ElasticSearch7.16.2版本安装hanlp插件
-cover: https://w.wallhaven.cc/full/3z/wallhaven-3z1p3d.jpg
+cover: https://w.wallhaven.cc/full/l3/wallhaven-l35l5l.jpg
 tag: ElasticSearch
 ---
 
