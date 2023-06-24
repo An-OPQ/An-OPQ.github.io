@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/2022/06/12/elasticSearch7.26/</loc>
+    
+    <lastmod>2023-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/09/12/Docker%E4%B8%8EK8S%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%EF%BC%88Kubeadm%E6%96%B9%E5%BC%8F%EF%BC%89/</loc>
+    
+    <lastmod>2023-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/tags/index.html</loc>
     
     <lastmod>2023-06-24</lastmod>
@@ -47,15 +65,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/messageboard/index.html</loc>
-    
-    <lastmod>2023-06-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/timeline/index.html</loc>
     
     <lastmod>2023-06-24</lastmod>
@@ -65,25 +74,16 @@
   </url>
   
   <url>
+    <loc>http://example.com/messageboard/index.html</loc>
+    
+    <lastmod>2023-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/2023/06/24/Kuboard%E9%83%A8%E7%BD%B2-k8s%E6%96%B9%E5%BC%8F/</loc>
-    
-    <lastmod>2023-06-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2023/06/24/elasticSearch7.26/</loc>
-    
-    <lastmod>2023-06-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/09/12/Docker%E4%B8%8EK8S%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%EF%BC%88Kubeadm%E6%96%B9%E5%BC%8F%EF%BC%89/</loc>
     
     <lastmod>2023-06-24</lastmod>
     
@@ -108,14 +108,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/K8S/</loc>
+    <loc>http://example.com/tags/ElasticSearch/</loc>
     <lastmod>2023-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/ElasticSearch/</loc>
+    <loc>http://example.com/tags/K8S/</loc>
     <lastmod>2023-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
