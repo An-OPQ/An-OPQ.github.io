@@ -2,7 +2,7 @@
 title: Docker 与 K8S 离线安装（Kubeadm方式）
 date: 2022-09-12 00:05:18
 tags: 运维
-cover: /img/wallhaven-z8l37o.jpg
+cover: wallhaven-1k5l19_3840x2160.png
 
 
 ---
