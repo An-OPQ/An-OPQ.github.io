@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/2022/11/16/Kuboard%E9%83%A8%E7%BD%B2-k8s%E6%96%B9%E5%BC%8F/</loc>
+    
+    <lastmod>2024-10-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/2022/12/18/elasticSearch7.26/</loc>
     
     <lastmod>2022-12-18</lastmod>
@@ -21,15 +30,6 @@
   
   <url>
     <loc>http://example.com/2022/09/12/Docker%E4%B8%8EK8S%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%EF%BC%88Kubeadm%E6%96%B9%E5%BC%8F%EF%BC%89/</loc>
-    
-    <lastmod>2022-11-16</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/11/16/Kuboard%E9%83%A8%E7%BD%B2-k8s%E6%96%B9%E5%BC%8F/</loc>
     
     <lastmod>2022-11-16</lastmod>
     
